@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() => runApp(Bank123App());
 
@@ -75,7 +76,10 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {},
+                          onPressed: () {
+                        // ✅ Aqui vai para a tela home
+                        Get.toNamed('/home-page');
+                      },
                       child: const Text(
                         'Entrar',
                         style: TextStyle(fontSize: 16),

@@ -16,9 +16,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       unknownRoute: GetPage(name: '/notfound', page: () => PaginaNaoEncontrada()),
-      initialRoute: '/home-page',
+      initialRoute: '/login',
             getPages: [
-        GetPage(name: '/', page: () => const HomePage()),
+        GetPage(name: '/', page: () =>  LoginScreen()),
         GetPage(name: '/home-page', page: () => const HomePage()),
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: '/error-page', page: () => TelaDeErro()),
