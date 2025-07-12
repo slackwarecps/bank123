@@ -9,8 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_secure_storage: ^9.2.4
   get: ^4.6.6
   path: ^1.9.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

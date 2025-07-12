@@ -1,3 +1,4 @@
+import 'package:bank123/telas/diversos/pagina01_secure.dart';
 import 'package:bank123/telas/login.dart';
 import 'package:bank123/telas/pagina_nao_encontrada.dart';
 import 'package:bank123/telas/tela_de_erro.dart';
@@ -16,12 +17,13 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       unknownRoute: GetPage(name: '/notfound', page: () => PaginaNaoEncontrada()),
-      initialRoute: '/login',
+      initialRoute: '/pagina01-secure',
             getPages: [
         GetPage(name: '/', page: () =>  LoginScreen()),
         GetPage(name: '/home-page', page: () => const HomePage()),
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: '/error-page', page: () => TelaDeErro()),
+        GetPage(name: '/pagina01-secure', page: () => Pagina01Secure()),
             ],
       title: 'Bank 123',
       theme: ThemeData(
