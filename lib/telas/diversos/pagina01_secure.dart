@@ -6,9 +6,7 @@ import 'dart:math';
 // Create storage
 final storage = FlutterSecureStorage();
 
-enum _Actions { deleteAll, isProtectedDataAvailable }
 
-enum _ItemActions { delete, edit, containsKey, read }
 
 class Pagina01Secure extends StatefulWidget {
   const Pagina01Secure({super.key});
@@ -21,10 +19,12 @@ class _Pagina01SecureState extends State<Pagina01Secure> {
 
   
   
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-
-  final TextEditingController _accountNameController =
-      TextEditingController(text: 'flutter_secure_storage_service');
+  // 1. Instância única e configurada do storage.
+  final FlutterSecureStorage _storage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
 
 @override
   void initState() {
@@ -36,17 +36,34 @@ class _Pagina01SecureState extends State<Pagina01Secure> {
 
   Future<void> _lerValorDoStorage() async {
     String? value = await _storage.read(key: "meuCpf");
+    String? quemEhOBatman = await _storage.read(key: "quemEhOBatman");
+    String? senhaSecreta = await _storage.read(key: "senhaSecreta");
     if (value != null) {
       developer.log("Valor do Secure Storage:  $value");
+
+     developer.log("Variável 'meuCpf' salva com o valor: $value");
+     developer.log("Variável 'quemEhOBatman' salva com o valor: $quemEhOBatman");
+     developer.log("Variável 'senhaSecreta' salva com o valor: $senhaSecreta");
+
+
     }else developer.log("meuCpf null");
   }
 
    Future<void> _definirVariavelSegura() async {
     final random = Random();
-    final cpf =
-        '${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}-${random.nextInt(99).toString().padLeft(2, '0')}';
-    await _storage.write(key: "meuCpf", value: cpf);
-    developer.log("Variável 'meuCpf' salva com o valor: $cpf");
+    final cpf = '${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}-${random.nextInt(99).toString().padLeft(2, '0')}';
+   
+    final identidadeDoBatman = 'Bruce Wayne';
+    final senhaSecreta = 'A senha do Peixe';
+   
+      await _storage.write(key: "meuCpf", value: cpf);
+      await _storage.write(key: "quemEhOBatman", value: identidadeDoBatman);
+      await _storage.write(key: "senhaSecreta", value:  senhaSecreta);
+
+     developer.log("Variável 'meuCpf' salva com o valor: $cpf");
+     developer.log("Variável 'quemEhOBatman' salva com o valor: $identidadeDoBatman");
+     developer.log("Variável 'senhaSecreta' salva com o valor: $senhaSecreta");
+
     _lerValorDoStorage();
   }
 
@@ -64,14 +81,15 @@ class _Pagina01SecureState extends State<Pagina01Secure> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('PAGINA 1 SEGURA'),
-            const Text('ola vovo'),
-            const Text('ola papai'),
+            const Text('Exemplos de uso do Secure Storage'),
+            const Text('Veja as opçoes e investigue no Android Studio'),
             const Divider(),
 
-            ElevatedButton(onPressed: _definirVariavelSegura, child: const Text("Salvar CPF Aleatório")),
+            ElevatedButton(onPressed: _definirVariavelSegura, child: const Text("Salvar CPF e segredos")),
+             const SizedBox(height: 20),
+            ElevatedButton(onPressed: _lerValorDoStorage, child: const Text("Ler dados do Storage Local")),
              const SizedBox(height: 20),
             ElevatedButton(onPressed: _removerVariavelSegura, child: const Text("Remover CPF")),
-
 
            ],
         ),

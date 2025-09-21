@@ -61,15 +61,20 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // ação de ir para extrato
+                        // ação de ir para contatos
+                          Get.toNamed('/contatos-page');
                       },
                       child: const Text(
-                        'Extrato',
+                        'Contatos',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
+
+
                   const SizedBox(height: 16),
+
+
                   SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -89,7 +94,82 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
+
+
+       const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                         Get.toNamed('/pagina01-secure');
+                      },
+                      child: const Text(
+                        'Secure storage',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+
+
+       const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                         Get.toNamed('/pagina02-shared-preferences');
+                      },
+                      child: const Text(
+                        'Shared Preferences',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+
+
+
+       const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                         Get.toNamed('/pagina03-biometric');
+                      },
+                      child: const Text(
+                        'Biometria Preferences',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+
+
+
+
+
+
                   const SizedBox(height: 16),
+
+
                   SizedBox(
                     width: double.infinity,
                     height: 48,
