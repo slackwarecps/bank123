@@ -62,6 +62,11 @@ final String? meuCpf = prefs.getString('cpfFabioShared');
      
      await prefs.setString('cpfFabioShared', '26721993877');
      await prefs.setString('quemEhOBatman', 'Bruce Wayne');
+
+     // AVISO DE SEGURANÇA:
+     // 1. NÃO armazene senhas ou chaves em texto plano no código (Hardcoded).
+     // 2. O Shared Preferences NÃO é seguro para dados sensíveis (senhas, tokens, PII).
+     // Em produção, utilize variáveis de ambiente e FlutterSecureStorage.
      await prefs.setString('senhaSecreta', 'O codigo é 007');
 
 

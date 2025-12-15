@@ -42,9 +42,11 @@ logar usando Email/Senha
 Spring Boot , Java 17, Spring Security
 * vscode
 * macbook
-* Nos header sempre devem ir o Token jwt do Firebase e o id da conta alem de um x-correlationId
+* Nos header sempre devem ir o Token jwt do Firebase e o id da conta(x-account-id) alem de um x-correlationId (x-correlationId )
 localhost:8080/bff-bank123/extrato/v1/listagem
 localhost:8080/bff-bank123/extrato/v1/saldo
+
+Para acessar a documentacao do swagger gerada no springboot acesse: http://localhost:8080/swagger-ui/index.html
 
 
 
@@ -70,3 +72,29 @@ nome do banco bank123_db
     origem: Tatiana Favoretti
 
 
+## 🏛️ Arquitetura da Solução
+
+Este projeto adota uma arquitetura **Cloud Native** moderna, focada em segurança e separação de responsabilidades. O aplicativo Flutter atua como um cliente "burro" (stateless), delegando a lógica de negócios pesada para o Backend (BFF) e a identidade para o Firebase.
+
+### Diagrama de Integração
+![alt text](image.png)
+
+### 🔄 Fluxo de Dados e Segurança
+
+1.  **Autenticação (Identity Provider):**
+    * O usuário realiza login via **Firebase Auth** (Google/Email).
+    * O App recebe um **JWT (JSON Web Token)** assinado. Nenhuma senha é trafegada para o nosso backend.
+    
+2.  **API Gateway (Zuplo):**
+    * Todas as requisições HTTP saem do App apontando para o **API Gateway**.
+    * O App implementa **SSL Pinning** (via Dio) para garantir que está conversando com o Gateway legítimo, prevenindo ataques *Man-in-the-Middle*.
+
+3.  **Backend for Frontend (BFF):**
+    * O App envia o JWT no header `Authorization: Bearer <token>`.
+    * O App aguarda respostas em JSON padronizado para montar as telas.
+
+### 🛠️ Tech Stack Mobile
+* **Framework:** Flutter (Dart)
+* **Http Client:** Dio (com Interceptors para Auth e Logging)
+* **State Management:** (Coloque o seu aqui: Provider/Bloc/Riverpod)
+* **Auth:** Firebase Auth SDK
