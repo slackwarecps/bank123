@@ -138,4 +138,17 @@ class BffService {
       rethrow;
     }
   }
+
+  // 4. Transferência
+  Future<Response> postTransferencia(Map<String, dynamic> payload) async {
+    try {
+      final response = await _dio.post(
+        '/bff-bank123/movimentacoes/v1/transferencia-conta',
+        data: payload,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

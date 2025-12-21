@@ -20,12 +20,29 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     _checkBiometricSettings();
+    _loadSavedCredentials();
   }
 
   @override
   void onReady() {
     super.onReady();
     _checkBiometricSettings();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    try {
+      final savedEmail = await _storage.read(key: 'SAVED_EMAIL');
+      final savedPassword = await _storage.read(key: 'SAVED_PASSWORD');
+
+      if (savedEmail != null && savedEmail.isNotEmpty) {
+        emailController.text = savedEmail;
+      }
+      if (savedPassword != null && savedPassword.isNotEmpty) {
+        passwordController.text = savedPassword;
+      }
+    } catch (e) {
+      print('Erro ao carregar credenciais: $e');
+    }
   }
 
   Future<void> _checkBiometricSettings() async {
@@ -85,6 +102,14 @@ class LoginController extends GetxController {
           }
         }
       }
+
+      // Salvar credenciais para o próximo login
+      await _storage.write(key: 'SAVED_EMAIL', value: emailController.text.trim());
+      await _storage.write(key: 'SAVED_PASSWORD', value: passwordController.text.trim());
+
+      // Definir TTL da sessão (5 minutos a partir de agora)
+      final ttl = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
+      await _storage.write(key: 'ttl_sessao', value: ttl);
 
       // If successful, navigate to home
       Get.offAllNamed('/home-page');

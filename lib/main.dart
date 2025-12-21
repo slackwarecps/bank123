@@ -11,6 +11,8 @@ import 'package:bank123/telas/login.dart';
 import 'package:bank123/telas/pagina_nao_encontrada.dart';
 import 'package:bank123/telas/splash_screen.dart';
 import 'package:bank123/telas/tela_de_erro.dart';
+import 'package:bank123/telas/transferencia_page.dart';
+import 'package:bank123/telas/extrato_page.dart';
 import 'package:bank123/telas/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,6 +54,8 @@ class MainApp extends StatelessWidget {
           page: () => Pagina02SharedPref(),
         ),
         GetPage(name: '/pagina03-biometric', page: () => Pagina03Biometric()),
+        GetPage(name: '/transferencia', page: () => const TransferenciaPage()),
+        GetPage(name: '/extrato', page: () => const ExtratoPage()),
       ],
       title: 'Bank 123',
       theme: ThemeData(

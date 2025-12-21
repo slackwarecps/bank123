@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 class PerfilController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final BffService _bffService = BffService();
   
   final email = ''.obs;
   final uid = ''.obs;
@@ -14,12 +13,6 @@ class PerfilController extends GetxController {
   final exp = ''.obs;
   final token = ''.obs;
   final bank123Claims = ''.obs;
-
-  // Dados do BFF
-  final nomeCompleto = ''.obs;
-  final numeroConta = ''.obs;
-  final agencia = ''.obs;
-  final statusConta = ''.obs;
 
   @override
   void onInit() {

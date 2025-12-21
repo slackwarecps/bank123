@@ -122,7 +122,7 @@ class HomePage extends StatelessWidget {
                     height: 48,
                     child: FilledButton(
                       onPressed: () {
-                        // ação de ir para transação
+                        controller.irParaTransferencia();
                       },
                       child: const Text(
                         'Realizar transação',

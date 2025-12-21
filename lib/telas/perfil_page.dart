@@ -42,17 +42,6 @@ class PerfilPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   
-                  // Dados do BFF
-                  _buildInfoCard(context, 'Nome Completo (BFF)', controller.nomeCompleto.value),
-                  Row(
-                    children: [
-                      Expanded(child: _buildInfoCard(context, 'Agência', controller.agencia.value)),
-                      const SizedBox(width: 16),
-                      Expanded(child: _buildInfoCard(context, 'Conta', controller.numeroConta.value)),
-                    ],
-                  ),
-                  _buildInfoCard(context, 'Status da Conta', controller.statusConta.value),
-
                   _buildInfoCard(context, 'Email (Firebase)', controller.email.value),
                   _buildInfoCard(context, 'UID', controller.uid.value),
                   _buildInfoCard(context, 'Emitido em (iat)', controller.iat.value),
