@@ -53,15 +53,23 @@ class CadastroController extends GetxController {
         password: password,
       );
 
-      Get.snackbar(
-        "Sucesso",
-        "Conta criada com sucesso! Você já está logado.",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      // Desloga imediatamente para que ele tenha que passar pela análise e logar depois
+      await _auth.signOut();
 
-      // Navega para a home e remove todas as telas anteriores
-      Get.offAllNamed('/home-page');
+      Get.defaultDialog(
+        title: "Sucesso",
+        middleText:
+            "Cadastro realizado com sucesso! Aguarde até 5 minutos para o cadastro ser analisado e tente logar novamente.",
+        backgroundColor: Colors.white,
+        titleStyle: const TextStyle(color: Colors.black),
+        middleTextStyle: const TextStyle(color: Colors.black),
+        textConfirm: "OK",
+        confirmTextColor: Colors.white,
+        buttonColor: Colors.green,
+        onConfirm: () {
+          Get.offAllNamed('/login');
+        },
+      );
     } on FirebaseAuthException catch (e) {
       String errorMessage = "Erro ao criar conta.";
 

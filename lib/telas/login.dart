@@ -114,32 +114,38 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    const Divider(),
-                    const SizedBox(height: 16),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () => controller.loginWithBiometrics(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.fingerprint, color: colorScheme.primary),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Login com biometria',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                                                    ],
+                                        const SizedBox(height: 24),
+                                        const Divider(),
+                                        const SizedBox(height: 16),
+                                        Obx(() {
+                                          if (!controller.isBiometricAllowed.value) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          return InkWell(
+                                            borderRadius: BorderRadius.circular(8),
+                                            onTap: () => controller.loginWithBiometrics(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.fingerprint, color: colorScheme.primary),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    'Login com biometria',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: colorScheme.primary,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                              const SizedBox(height: 16),
+                                            ),
+                                          );
+                                        }),
+                                        const SizedBox(height: 16),
+                    
                                               TextButton(
                                                 onPressed: () => Get.toNamed('/cadastro'),
                                                 child: const Text('Não tem conta? Cadastre-se'),

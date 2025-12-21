@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                       if (value == 'perfil') {
                         Get.toNamed('/perfil');
                       } else if (value == 'configuracoes') {
-                        // Get.toNamed('/configuracoes');
+                        Get.toNamed('/configuracoes');
                       } else if (value == 'sair') {
                         Get.offAllNamed('/login');
                       }

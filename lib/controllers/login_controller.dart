@@ -2,15 +2,40 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final LocalAuthentication _localAuth = LocalAuthentication();
+  final _storage = const FlutterSecureStorage();
+  
   var isLoading = false.obs;
+  var isBiometricAllowed = false.obs; // Controla se o botão aparece
 
   // Controllers for text fields
   final emailController = TextEditingController(text: 'teste@teste.com.br');
   final passwordController = TextEditingController(text: 'teste123');
+
+  @override
+  void onInit() {
+    super.onInit();
+    _checkBiometricSettings();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    _checkBiometricSettings();
+  }
+
+  Future<void> _checkBiometricSettings() async {
+    try {
+      String? value = await _storage.read(key: 'biometric_enabled');
+      isBiometricAllowed.value = value == 'true';
+    } catch (e) {
+      isBiometricAllowed.value = false;
+    }
+  }
 
   Future<void> login() async {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {

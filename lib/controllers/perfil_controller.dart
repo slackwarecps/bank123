@@ -11,6 +11,7 @@ class PerfilController extends GetxController {
   final iat = ''.obs;
   final exp = ''.obs;
   final token = ''.obs;
+  final bank123Claims = ''.obs;
 
   @override
   void onInit() {
@@ -29,6 +30,16 @@ class PerfilController extends GetxController {
       IdTokenResult tokenResult = await user.getIdTokenResult();
       token.value = tokenResult.token ?? 'Erro ao obter token';
       
+      // Claims
+      final claims = tokenResult.claims ?? {};
+      
+      // Claim específica do Bank123
+      if (claims.containsKey('bank123/jwt/claims')) {
+        bank123Claims.value = claims['bank123/jwt/claims'].toString();
+      } else {
+        bank123Claims.value = 'N/A';
+      }
+
       // IAT e EXP (Issued At e Expiration Time)
       // O IdTokenResult já traz as datas processadas, mas podemos pegar do map de claims se necessário.
       // Geralmente, expirationTime e authTime (similar ao iat) estão disponíveis diretamente ou nos claims.
