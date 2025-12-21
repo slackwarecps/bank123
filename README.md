@@ -76,13 +76,36 @@ nome do banco bank123_db
 
 ### Home Page
 - Saudação alterada para "Bem vindo!".
-- Interface simplificada: removidos os botões de POCs (Contatos, Secure Storage, Shared Preferences e Biometria) para focar nas funcionalidades principais.
-- Mantidos apenas os botões "Realizar transação" e "Sair".
+- Interface simplificada: removidos os botões de POCs (Contatos, Secure Storage, Shared Preferences e Biometria).
+- Menu superior direito adicionado com opções: **Perfil**, **Configurações** e **Sair**.
+- Identidade visual consolidada com o ícone `account_balance` no cabeçalho.
 
-### Login com Biometria
-- A autenticação biométrica na tela de login agora é opcional e disparada manualmente.
-- Foi adicionado um botão específico "Login com biometria" para acionar a validação local.
-- Removido o disparo automático de biometria ao iniciar o aplicativo para melhorar a experiência do usuário e evitar interrupções indesejadas.
+### Login e Autenticação
+- **Biometria Condicional:** O botão de login por biometria só é exibido se o usuário habilitar esta opção na tela de Configurações.
+- **Valores de Teste:** Campos de e-mail e senha pré-preenchidos com `teste@teste.com.br` e `teste123`.
+- **Identidade Visual:** Ícone central alterado para `account_balance`.
+
+### Fluxo de Cadastro
+- **Criação de Conta:** Novo usuário é registrado no Firebase Authentication.
+- **Análise de Segurança:** Após o cadastro, o usuário é desconectado imediatamente e recebe uma mensagem informando que deve aguardar até 5 minutos para análise antes de tentar o primeiro login.
+- **Redirecionamento:** O usuário é levado de volta para a tela de login após confirmar a mensagem de sucesso.
+- **Ícone:** Utilização do ícone `person_add_outlined`.
+
+### Configurações
+- **Controle de Biometria:** Opção (Toggle) para habilitar ou desabilitar o login por biometria.
+- **Persistência Segura:** A preferência do usuário é salva utilizando o **Flutter Secure Storage**, garantindo que a escolha persista entre sessões de forma protegida.
+- **Padrão:** A funcionalidade vem desligada por padrão.
+
+### Tela de Perfil
+- **Detalhamento de Token:** Exibição de informações técnicas extraídas do Firebase JWT:
+    - E-mail e UID do usuário.
+    - Timestamps de emissão (iat) e expiração (exp).
+    - Conteúdo da claim personalizada `bank123/jwt/claims`.
+- **Gestão de Token:** Campo para visualização do Token JWT completo com funcionalidade de "Copiar Token" para a área de transferência.
+
+### Interface e Tema
+- **Material Design 3:** App totalmente convertido para o padrão Material 3, utilizando um `colorSchemeSeed` baseado na cor vermelha.
+- **Splash Screen:** Fundo alterado para a cor Marrom (Colors.brown) com elementos em branco.
 
 ## 🏛️ Arquitetura da Solução
 
