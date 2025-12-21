@@ -9,8 +9,8 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
 
   // Controllers for text fields
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final emailController = TextEditingController(text: 'teste@teste.com.br');
+  final passwordController = TextEditingController(text: 'teste123');
 
   Future<void> login() async {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {

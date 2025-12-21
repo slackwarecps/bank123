@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
                     icon: Icon(Icons.more_vert, color: colorScheme.onPrimary),
                     onSelected: (value) {
                       if (value == 'perfil') {
-                        // Get.toNamed('/perfil');
+                        Get.toNamed('/perfil');
                       } else if (value == 'configuracoes') {
                         // Get.toNamed('/configuracoes');
                       } else if (value == 'sair') {

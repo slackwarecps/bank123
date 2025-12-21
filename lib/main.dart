@@ -5,6 +5,7 @@ import 'package:bank123/telas/diversos/pagina02_shared_preferences.dart';
 import 'package:bank123/telas/diversos/pagina03_biometric%20copy.dart';
 import 'package:bank123/telas/diversos/validaAutenticacao.dart';
 import 'package:bank123/telas/cadastro_page.dart';
+import 'package:bank123/telas/perfil_page.dart';
 import 'package:bank123/telas/login.dart';
 import 'package:bank123/telas/pagina_nao_encontrada.dart';
 import 'package:bank123/telas/splash_screen.dart';
@@ -40,6 +41,7 @@ class MainApp extends StatelessWidget {
         GetPage(name: '/home-page', page: () => const HomePage()),
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: '/cadastro', page: () => CadastroPage()),
+        GetPage(name: '/perfil', page: () => const PerfilPage()),
         GetPage(name: '/error-page', page: () => TelaDeErro()),
         GetPage(name: '/pagina01-secure', page: () => Pagina01Secure()),
         GetPage(name: '/contatos-page', page: () => ContatosPage()),
