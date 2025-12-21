@@ -2,7 +2,8 @@ Esse é uma aplicacao que é um frontend de um tcc sobre seguranca em flutter.
 A arquitetura dessa aplicacao é:
 
 - flutter
-- bff-bank123 construio
+- bff-bank123 construido com Springboot e se conectando em um banco postgres.
+- firebase Authentication com usuario e senha.
 
 
 
@@ -16,5 +17,5 @@ Responda em Portugues
 
 flutter devices
 
-flutter pub get && flutter run -d emulator-5554
+Emulador Android ID: Pixel_3a_API_33
 flutterfire configure

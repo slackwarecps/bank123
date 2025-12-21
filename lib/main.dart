@@ -4,6 +4,7 @@ import 'package:bank123/bindings/auth_binding.dart';
 import 'package:bank123/telas/diversos/pagina02_shared_preferences.dart';
 import 'package:bank123/telas/diversos/pagina03_biometric%20copy.dart';
 import 'package:bank123/telas/diversos/validaAutenticacao.dart';
+import 'package:bank123/telas/cadastro_page.dart';
 import 'package:bank123/telas/login.dart';
 import 'package:bank123/telas/pagina_nao_encontrada.dart';
 import 'package:bank123/telas/splash_screen.dart';
@@ -38,6 +39,7 @@ class MainApp extends StatelessWidget {
         GetPage(name: '/valida-autenticacao', page: () => ValidaAutenticacao()),
         GetPage(name: '/home-page', page: () => const HomePage()),
         GetPage(name: '/login', page: () => LoginScreen()),
+        GetPage(name: '/cadastro', page: () => CadastroPage()),
         GetPage(name: '/error-page', page: () => TelaDeErro()),
         GetPage(name: '/pagina01-secure', page: () => Pagina01Secure()),
         GetPage(name: '/contatos-page', page: () => ContatosPage()),
@@ -48,7 +50,11 @@ class MainApp extends StatelessWidget {
         GetPage(name: '/pagina03-biometric', page: () => Pagina03Biometric()),
       ],
       title: 'Bank 123',
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        colorSchemeSeed: Colors.red,
+        useMaterial3: true,
+        brightness: Brightness.light,
+      ),
     );
   }
 }

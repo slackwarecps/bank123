@@ -1,32 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  final Color primaryRed = const Color(0xFFE30613);
-
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              color: primaryRed,
+              color: colorScheme.primary,
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              child: const Text(
-                'Bank123',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.account_balance, color: colorScheme.onPrimary),
+                  Text(
+                    'Bank123',
+                    style: TextStyle(
+                      color: colorScheme.onPrimary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert, color: colorScheme.onPrimary),
+                    onSelected: (value) {
+                      if (value == 'perfil') {
+                        // Get.toNamed('/perfil');
+                      } else if (value == 'configuracoes') {
+                        // Get.toNamed('/configuracoes');
+                      } else if (value == 'sair') {
+                        Get.offAllNamed('/login');
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(value: 'perfil', child: Text('Perfil')),
+                      const PopupMenuItem(
+                        value: 'configuracoes',
+                        child: Text('Configurações'),
+                      ),
+                      const PopupMenuItem(value: 'sair', child: Text('Sair')),
+                    ],
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 32),
@@ -35,7 +58,7 @@ class HomePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
-                  'Olá Fábio ',
+                  'Bem vindo!',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -43,9 +66,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            const FlutterLogo(size: 100),
-            const SizedBox(height: 32),
+            const SizedBox(height: 48),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
@@ -53,138 +74,40 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                    child: FilledButton(
                       onPressed: () {
-                        // ação de ir para contatos
-                          Get.toNamed('/contatos-page');
+                        // ação de consultar saldo
                       },
                       child: const Text(
-                        'Contatos',
+                        'Consultar saldo',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
-
-
                   const SizedBox(height: 16),
-
-
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                    child: FilledButton(
+                      onPressed: () {
+                        // ação de consultar extrato
+                      },
+                      child: const Text(
+                        'Consultar extrato',
+                        style: TextStyle(fontSize: 16),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: FilledButton(
                       onPressed: () {
                         // ação de ir para transação
                       },
                       child: const Text(
                         'Realizar transação',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-
-
-       const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                         Get.toNamed('/pagina01-secure');
-                      },
-                      child: const Text(
-                        'Secure storage',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-
-
-       const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                         Get.toNamed('/pagina02-shared-preferences');
-                      },
-                      child: const Text(
-                        'Shared Preferences',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-
-
-
-       const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                         Get.toNamed('/pagina03-biometric');
-                      },
-                      child: const Text(
-                        'Biometria Preferences',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-
-
-
-
-
-
-                  const SizedBox(height: 16),
-
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryRed, 
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.offAllNamed('/login');
-                      },
-                      child: const Text(
-                        'Sair',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),

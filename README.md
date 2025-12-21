@@ -72,6 +72,18 @@ nome do banco bank123_db
     origem: Tatiana Favoretti
 
 
+## Requisitos Funcionais - Últimas Alterações
+
+### Home Page
+- Saudação alterada para "Bem vindo!".
+- Interface simplificada: removidos os botões de POCs (Contatos, Secure Storage, Shared Preferences e Biometria) para focar nas funcionalidades principais.
+- Mantidos apenas os botões "Realizar transação" e "Sair".
+
+### Login com Biometria
+- A autenticação biométrica na tela de login agora é opcional e disparada manualmente.
+- Foi adicionado um botão específico "Login com biometria" para acionar a validação local.
+- Removido o disparo automático de biometria ao iniciar o aplicativo para melhorar a experiência do usuário e evitar interrupções indesejadas.
+
 ## 🏛️ Arquitetura da Solução
 
 Este projeto adota uma arquitetura **Cloud Native** moderna, focada em segurança e separação de responsabilidades. O aplicativo Flutter atua como um cliente "burro" (stateless), delegando a lógica de negócios pesada para o Backend (BFF) e a identidade para o Firebase.

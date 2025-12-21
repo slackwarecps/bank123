@@ -14,6 +14,7 @@ class ContatosPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const Icon(Icons.account_balance),
         title: const Text('Meus Contatos'),
       ),
       body: controller.obx(

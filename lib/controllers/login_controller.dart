@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final LocalAuthentication _localAuth = LocalAuthentication();
   var isLoading = false.obs;
 
   // Controllers for text fields
@@ -58,6 +60,44 @@ class LoginController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> loginWithBiometrics() async {
+    try {
+      bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+      bool isDeviceSupported = await _localAuth.isDeviceSupported();
+
+      if (canCheckBiometrics || isDeviceSupported) {
+        bool didAuthenticate = await _localAuth.authenticate(
+          localizedReason: 'Por favor, autentique-se para entrar',
+          options: const AuthenticationOptions(
+            stickyAuth: true,
+            biometricOnly: true,
+          ),
+        );
+
+        if (didAuthenticate) {
+          // Aqui, em um app real, você provavelmente usaria um token salvo
+          // ou apenas permitiria o acesso se o usuário já tivesse logado uma vez.
+          // Para este protótipo, vamos navegar para a home.
+          Get.offAllNamed('/home-page');
+        }
+      } else {
+        Get.snackbar(
+          "Biometria",
+          "Biometria não disponível neste dispositivo.",
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Erro",
+        "Erro ao autenticar com biometria: $e",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 }

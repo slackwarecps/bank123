@@ -2,56 +2,54 @@ import 'package:bank123/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() => runApp(Bank123App());
-
-class Bank123App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bank123',
-      home: LoginScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class LoginScreen extends StatelessWidget {
-  final Color primaryRed = const Color(0xFFE30613);
-  final Color gray = const Color(0xFF4A4A4A);
-
   // Find the injected controller
   final LoginController controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                color: primaryRed,
+                color: colorScheme.primary,
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                child: const Text(
-                  'Bank123',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.account_balance, color: colorScheme.onPrimary),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Bank123',
+                      style: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 40),
-              const Text(
+              Text(
                 'Bem-vindo',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: colorScheme.onSurface,
                 ),
+              ),
+              const SizedBox(height: 20),
+              Icon(
+                Icons.account_balance,
+                size: 100,
+                color: colorScheme.primary,
               ),
               const SizedBox(height: 30),
               Padding(
@@ -65,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: 'E-mail',
                         filled: true,
-                        fillColor: Colors.grey[200],
+                        fillColor: colorScheme.surfaceContainerHighest,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -81,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: 'Senha',
                         filled: true,
-                        fillColor: Colors.grey[200],
+                        fillColor: colorScheme.surfaceContainerHighest,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -89,65 +87,71 @@ class LoginScreen extends StatelessWidget {
                         prefixIcon: const Icon(Icons.lock_outline),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       height: 48,
                       child: Obx(
-                        () => ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryRed,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
+                        () => FilledButton(
                           onPressed:
                               controller.isLoading.value
                                   ? null
                                   : () => controller.login(),
                           child:
                               controller.isLoading.value
-                                  ? const CircularProgressIndicator(
-                                    color: Colors.white,
+                                  ? SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: colorScheme.onPrimary,
+                                      strokeWidth: 2,
+                                    ),
                                   )
                                   : const Text(
                                     'Entrar',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color:
-                                          Colors.white, // Ensure text is white
-                                    ),
+                                    style: TextStyle(fontSize: 16),
                                   ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const Divider(height: 1, thickness: 1),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.fingerprint, color: Colors.black),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Login com biometria',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: gray,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    const FlutterLogo(size: 100), // Ícone padrão do Flutter
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const SizedBox(height: 16),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => controller.loginWithBiometrics(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.fingerprint, color: colorScheme.primary),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Login com biometria',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: colorScheme.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 16),
+                                              TextButton(
+                                                onPressed: () => Get.toNamed('/cadastro'),
+                                                child: const Text('Não tem conta? Cadastre-se'),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                          

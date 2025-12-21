@@ -22,8 +22,7 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     developer.log("[AuthController] Iniciando a tela de validação de autenticação.");
-    // Inicia a tentativa de autenticação assim que a tela é carregada.
-    _autenticar();
+    // Autenticação automática removida para permitir acionamento manual.
   }
 
 /// Tenta realizar a autenticação.

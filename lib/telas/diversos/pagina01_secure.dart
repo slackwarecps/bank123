@@ -54,6 +54,10 @@ class _Pagina01SecureState extends State<Pagina01Secure> {
     final cpf = '${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}.${random.nextInt(999).toString().padLeft(3, '0')}-${random.nextInt(99).toString().padLeft(2, '0')}';
    
     final identidadeDoBatman = 'Bruce Wayne';
+    
+    // AVISO DE SEGURANÇA:
+    // Evite hardcoding de senhas/chaves no código fonte.
+    // Em produção, esta string viria de um input seguro ou variável de ambiente.
     final senhaSecreta = 'A senha do Peixe';
    
       await _storage.write(key: "meuCpf", value: cpf);
