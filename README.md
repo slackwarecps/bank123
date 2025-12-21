@@ -132,4 +132,8 @@ Este projeto adota uma arquitetura **Cloud Native** moderna, focada em seguranç
 * **Framework:** Flutter (Dart)
 * **Http Client:** Dio (com Interceptors para Auth e Logging)
 * **State Management:** (Coloque o seu aqui: Provider/Bloc/Riverpod)
-* **Auth:** Firebase Auth SDK
+## 🛠️ Documentação Técnica
+
+Para desenvolvedores que desejam contribuir ou manter este projeto, consulte o guia detalhado de arquitetura, padrões e configuração no arquivo:
+
+👉 **[DEVELOPER.md](DEVELOPER.md)**
