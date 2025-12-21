@@ -107,6 +107,10 @@ nome do banco bank123_db
 - **Material Design 3:** App totalmente convertido para o padrão Material 3, utilizando um `colorSchemeSeed` baseado na cor vermelha.
 - **Splash Screen:** Fundo alterado para a cor Marrom (Colors.brown) com elementos em branco.
 
+### Gestão de Sessão e Conta
+- **Persistência de Conta:** Após o login, o `numeroConta` é extraído das claims do token JWT e persistido de forma segura no **Flutter Secure Storage** sob a chave `NUMERO_CONTA`.
+- **Cabeçalhos Dinâmicos:** O valor persistido em `NUMERO_CONTA` é injetado automaticamente no header `x-account-id` de todas as requisições ao BFF via interceptor do Dio.
+
 ## 🏛️ Arquitetura da Solução
 
 Este projeto adota uma arquitetura **Cloud Native** moderna, focada em segurança e separação de responsabilidades. O aplicativo Flutter atua como um cliente "burro" (stateless), delegando a lógica de negócios pesada para o Backend (BFF) e a identidade para o Firebase.

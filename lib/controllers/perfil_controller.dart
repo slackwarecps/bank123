@@ -1,3 +1,4 @@
+import 'package:bank123/services/bff_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:get/get.dart';
 
 class PerfilController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final BffService _bffService = BffService();
   
   final email = ''.obs;
   final uid = ''.obs;
@@ -12,6 +14,12 @@ class PerfilController extends GetxController {
   final exp = ''.obs;
   final token = ''.obs;
   final bank123Claims = ''.obs;
+
+  // Dados do BFF
+  final nomeCompleto = ''.obs;
+  final numeroConta = ''.obs;
+  final agencia = ''.obs;
+  final statusConta = ''.obs;
 
   @override
   void onInit() {
@@ -33,17 +41,13 @@ class PerfilController extends GetxController {
       // Claims
       final claims = tokenResult.claims ?? {};
       
-      // Claim específica do Bank123
       if (claims.containsKey('bank123/jwt/claims')) {
         bank123Claims.value = claims['bank123/jwt/claims'].toString();
       } else {
         bank123Claims.value = 'N/A';
       }
 
-      // IAT e EXP (Issued At e Expiration Time)
-      // O IdTokenResult já traz as datas processadas, mas podemos pegar do map de claims se necessário.
-      // Geralmente, expirationTime e authTime (similar ao iat) estão disponíveis diretamente ou nos claims.
-      
+      // IAT e EXP
       DateTime? authTime = tokenResult.authTime;
       DateTime? expirationTime = tokenResult.expirationTime;
 

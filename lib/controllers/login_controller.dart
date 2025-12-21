@@ -51,10 +51,40 @@ class LoginController extends GetxController {
     try {
       isLoading.value = true;
 
-      await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      // Logs de Retorno e Status do Login
+      final tokenResult = await userCredential.user?.getIdTokenResult();
+      
+ 
+        print('\n======= LOGIN SUCCESS =======');
+        print('Status: Autenticado com sucesso');
+        print('User UID: ${userCredential.user?.uid}');
+        print('Email: ${userCredential.user?.email}');
+        print('Token: ${tokenResult?.token}');
+        print('Claims: ${tokenResult?.claims}');
+        print('==============================\n');
+   
+
+      // Extrair numeroConta das claims e salvar no Secure Storage
+      final claims = tokenResult?.claims;
+
+      if (claims != null && claims.containsKey('bank123/jwt/claims')) {
+        final bankClaims = claims['bank123/jwt/claims'];
+        // Verifica se é um Map e tenta pegar 'numeroconta' (ou 'numeroConta' por garantia)
+        if (bankClaims is Map) {
+          final conta = bankClaims['numeroconta'] ?? bankClaims['numeroConta'];
+          if (conta != null) {
+            await _storage.write(
+              key: 'NUMERO_CONTA', 
+              value: conta.toString()
+            );
+          }
+        }
+      }
 
       // If successful, navigate to home
       Get.offAllNamed('/home-page');

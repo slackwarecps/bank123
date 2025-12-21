@@ -1,3 +1,4 @@
+import 'package:bank123/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final HomeController controller = Get.put(HomeController());
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -74,29 +76,45 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: FilledButton(
-                      onPressed: () {
-                        // ação de consultar saldo
+                    child: Obx(() => FilledButton(
+                      onPressed: controller.isLoading.value ? null : () {
+                        controller.consultarSaldo();
                       },
-                      child: const Text(
-                        'Consultar saldo',
-                        style: TextStyle(fontSize: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (controller.isLoading.value) ...[
+                            const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                          const Text(
+                            'Consultar saldo',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
-                    ),
+                    )),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: FilledButton(
-                      onPressed: () {
-                        // ação de consultar extrato
+                    child: Obx(() => FilledButton(
+                      onPressed: controller.isLoading.value ? null : () {
+                        controller.consultarExtrato();
                       },
                       child: const Text(
                         'Consultar extrato',
                         style: TextStyle(fontSize: 16),
                       ),
-                    ),
+                    )),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
