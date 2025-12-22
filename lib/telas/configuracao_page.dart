@@ -13,7 +13,17 @@ class ConfiguracaoPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurações'),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/icon/bank_icon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 8),
+            const Text('Configurações'),
+          ],
+        ),
         backgroundColor: colorScheme.surface,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

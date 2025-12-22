@@ -22,7 +22,11 @@ class HomePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.account_balance, color: colorScheme.onPrimary),
+                  Image.asset(
+                    'assets/icon/bank_icon.png',
+                    width: 24,
+                    height: 24,
+                  ),
                   Text(
                     'Bank123',
                     style: TextStyle(

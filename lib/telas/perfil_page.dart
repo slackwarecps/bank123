@@ -13,7 +13,17 @@ class PerfilPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu Perfil'),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/icon/bank_icon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 8),
+            const Text('Meu Perfil'),
+          ],
+        ),
         backgroundColor: colorScheme.surface,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

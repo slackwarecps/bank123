@@ -23,7 +23,11 @@ class LoginScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.account_balance, color: colorScheme.onPrimary),
+                    Image.asset(
+                      'assets/icon/bank_icon.png',
+                      width: 32,
+                      height: 32,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Bank123',
@@ -46,10 +50,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Icon(
-                Icons.account_balance,
-                size: 100,
-                color: colorScheme.primary,
+              Image.asset(
+                'assets/icon/bank_icon.png',
+                width: 100,
+                height: 100,
               ),
               const SizedBox(height: 30),
               Padding(

@@ -10,7 +10,6 @@ import 'package:bank123/telas/configuracao_page.dart';
 import 'package:bank123/telas/perfil_page.dart';
 import 'package:bank123/telas/login.dart';
 import 'package:bank123/telas/pagina_nao_encontrada.dart';
-import 'package:bank123/telas/splash_screen.dart';
 import 'package:bank123/telas/tela_de_erro.dart';
 import 'package:bank123/telas/transferencia_page.dart';
 import 'package:bank123/telas/extrato_page.dart';
@@ -37,9 +36,8 @@ class MainApp extends StatelessWidget {
         page: () => PaginaNaoEncontrada(),
       ),
       initialBinding: AuthBinding(),
-      initialRoute: '/splash',
+      initialRoute: '/',
       getPages: [
-        GetPage(name: '/splash', page: () => const SplashScreen()),
         GetPage(name: '/', page: () => LoginScreen(), binding: LoginBinding()),
         GetPage(name: '/valida-autenticacao', page: () => ValidaAutenticacao()),
         GetPage(name: '/home-page', page: () => const HomePage()),

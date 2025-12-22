@@ -13,7 +13,17 @@ class ExtratoPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Extrato'),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/icon/bank_icon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 8),
+            const Text('Extrato'),
+          ],
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Get.back(),

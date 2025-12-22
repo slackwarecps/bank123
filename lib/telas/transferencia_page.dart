@@ -30,7 +30,17 @@ class TransferenciaPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transferência'),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/icon/bank_icon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 8),
+            const Text('Transferência'),
+          ],
+        ),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
