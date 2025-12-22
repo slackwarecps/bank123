@@ -1,143 +1,96 @@
-# bank123
+# 🏦 Bank123 - Mobile Frontend
 
-A new Flutter project.
+Este é o frontend mobile do projeto **Bank123**, um protótipo desenvolvido como parte de um TCC focado em segurança cibernética em aplicações Flutter. O objetivo é demonstrar práticas seguras de autenticação, armazenamento de dados e integração com serviços de backend e nuvem.
 
-1 Configure a versao do Android minimo de 18
+---
 
-Emulador PIN: 12345
+## 📋 Requisitos Funcionais (RF)
 
-caminho: /Users/fabioalvaropereira/workspaces/tcc/Projeto Bank123/bank123
+Os requisitos funcionais descrevem as funcionalidades que o usuário pode realizar no aplicativo.
 
-## 
+1.  **RF01 - Autenticação de Usuário:** O sistema deve permitir que o usuário realize login seguro utilizando e-mail e senha através do Firebase Authentication.
+2.  **RF02 - Cadastro de Novo Usuário:** O sistema deve permitir a criação de novas contas, registrando o usuário no Firebase Authentication e integrando com o processo de análise de segurança.
+3.  **RF03 - Fluxo de Segurança Pós-Cadastro:** Após o cadastro, o usuário deve ser desconectado e informado sobre um período de análise de até 5 minutos antes do primeiro acesso para mitigação de fraudes.
+4.  **RF04 - Consulta de Saldo:** O usuário deve ser capaz de visualizar o saldo atualizado de sua conta bancária na tela inicial.
+5.  **RF05 - Consulta de Extrato:** O sistema deve exibir a listagem detalhada de transações (entradas e saídas) do usuário, integrando com o BFF.
+6.  **RF06 - Gestão de Perfil:** O usuário deve poder visualizar seus dados cadastrais e informações técnicas do Token JWT (e-mail, UID, claims personalizadas) para transparência de dados.
+7.  **RF07 - Cópia de Token:** Funcionalidade para copiar o Token JWT completo para a área de transferência, facilitando auditorias e depuração técnica.
+8.  **RF08 - Configurações de Segurança:** O usuário deve poder habilitar ou desabilitar o login por biometria de forma voluntária.
+9.  **RF09 - Autenticação Biométrica:** Se habilitado nas configurações, o sistema deve permitir o login utilizando a biometria do dispositivo (Digital ou FaceID).
+10. **RF10 - Transferência de Valores:** O sistema deve permitir a realização de transferências financeiras entre contas (funcionalidade em desenvolvimento/POC).
+11. **RF11 - Gestão de Contatos:** O usuário deve poder visualizar uma lista de contatos para agilizar operações financeiras.
 
-Crie uma lista de contatos usando dio e getx para buscar a lista de contatos no servidor. 
+---
 
-Arquitetura
-App FLutter > Backend Spring Boot Rest.
+## 🔒 Requisitos Não Funcionais (RNF)
 
+Os requisitos não funcionais descrevem os atributos de qualidade e restrições técnicas do sistema.
 
-### Lista de Contatos
-GET 192.168.1.100/bank123/bl/contatos
-Header 
-minha-conta:123456
-Authentication:{meutoken}
+1.  **RNF01 - Segurança (Identidade):** Uso obrigatório do Firebase Authentication para gestão centralizada de identidade e emissão de tokens JWT.
+2.  **RNF02 - Segurança (Persistência):** Dados sensíveis, como o número da conta e preferências de biometria, devem ser armazenados utilizando o `Flutter Secure Storage`, que utiliza Keychain (iOS) ou Keystore (Android).
+3.  **RNF03 - Segurança (Comunicação):** Todas as requisições ao Backend (BFF) devem ser cifradas via HTTPS e incluir cabeçalhos de segurança: `Authorization (Bearer)`, `x-account-id` e `x-correlation-id`.
+4.  **RNF04 - Segurança (Prevenção MITM):** Implementação de SSL Pinning através do cliente HTTP Dio para garantir a autenticidade do servidor e prevenir ataques Man-in-the-Middle.
+5.  **RNF05 - Arquitetura (BFF):** Adoção do padrão Backend For Frontend (BFF) em Spring Boot para mediar a comunicação entre o app mobile e os serviços de backend.
+6.  **RNF06 - Interface e UX:** A interface deve seguir as diretrizes do **Material Design 3**, utilizando um esquema de cores baseado em tons de vermelho e marrom para identidade visual.
+7.  **RNF07 - Gerenciamento de Estado:** Uso da biblioteca `GetX` para gerenciamento de estado reativo, injeção de dependências e navegação.
+8.  **RNF08 - Desempenho e Feedback:** O app deve exibir uma Splash Screen e indicadores de carregamento durante operações assíncronas para melhorar a percepção de performance.
+9.  **RNF09 - Compatibilidade:** Suporte mínimo para Android API 18+.
 
-{
-dados:[
-    {
-        "nome":"Tatiana",
-        "chavePix":{"tipo":"email","valor":"fabio.alvaro@email.com"}
-    }
-]
-}
-
-
-## BACKEND E BANCO
-
-## FIREBASE LOGIN
-projeto bank123
-logar usando Email/Senha
-
-## BACKEND
-Spring Boot , Java 17, Spring Security
-* vscode
-* macbook
-* Nos header sempre devem ir o Token jwt do Firebase e o id da conta(x-account-id) alem de um x-correlationId (x-correlationId )
-localhost:8080/bff-bank123/extrato/v1/listagem
-localhost:8080/bff-bank123/extrato/v1/saldo
-
-Para acessar a documentacao do swagger gerada no springboot acesse: http://localhost:8080/swagger-ui/index.html
-
-
-
-### BANCO DE DADOS
-Utilizado como o banco de dados para guardar informações como o saldo e as movimentações da conta
-
-Postgres SQL
-usuario bank123
-senha senhabank123
-nome do banco bank123_db
-
-- Contas
-    numeroConta Integer
-    dataCriacao DateTimeStamp
-    saldo Float com duas casas decimais exemplo R$ 999.999.999,99
-- livroCaixa
-    idtransacao: 321654
-    dataTransacao: DateTimeStamp
-    valorTransacao 60,00
-    numeroConta 123456
-    operacao: ENTRADA/SAIDA
-    destino: Fabio Pereira
-    origem: Tatiana Favoretti
-
-
-## Requisitos Funcionais - Últimas Alterações
-
-### Home Page
-- Saudação alterada para "Bem vindo!".
-- Interface simplificada: removidos os botões de POCs (Contatos, Secure Storage, Shared Preferences e Biometria).
-- Menu superior direito adicionado com opções: **Perfil**, **Configurações** e **Sair**.
-- Identidade visual consolidada com o ícone `account_balance` no cabeçalho.
-
-### Login e Autenticação
-- **Biometria Condicional:** O botão de login por biometria só é exibido se o usuário habilitar esta opção na tela de Configurações.
-- **Valores de Teste:** Campos de e-mail e senha pré-preenchidos com `teste@teste.com.br` e `teste123`.
-- **Identidade Visual:** Ícone central alterado para `account_balance`.
-
-### Fluxo de Cadastro
-- **Criação de Conta:** Novo usuário é registrado no Firebase Authentication.
-- **Análise de Segurança:** Após o cadastro, o usuário é desconectado imediatamente e recebe uma mensagem informando que deve aguardar até 5 minutos para análise antes de tentar o primeiro login.
-- **Redirecionamento:** O usuário é levado de volta para a tela de login após confirmar a mensagem de sucesso.
-- **Ícone:** Utilização do ícone `person_add_outlined`.
-
-### Configurações
-- **Controle de Biometria:** Opção (Toggle) para habilitar ou desabilitar o login por biometria.
-- **Persistência Segura:** A preferência do usuário é salva utilizando o **Flutter Secure Storage**, garantindo que a escolha persista entre sessões de forma protegida.
-- **Padrão:** A funcionalidade vem desligada por padrão.
-
-### Tela de Perfil
-- **Detalhamento de Token:** Exibição de informações técnicas extraídas do Firebase JWT:
-    - E-mail e UID do usuário.
-    - Timestamps de emissão (iat) e expiração (exp).
-    - Conteúdo da claim personalizada `bank123/jwt/claims`.
-- **Gestão de Token:** Campo para visualização do Token JWT completo com funcionalidade de "Copiar Token" para a área de transferência.
-
-### Interface e Tema
-- **Material Design 3:** App totalmente convertido para o padrão Material 3, utilizando um `colorSchemeSeed` baseado na cor vermelha.
-- **Splash Screen:** Fundo alterado para a cor Marrom (Colors.brown) com elementos em branco.
-
-### Gestão de Sessão e Conta
-- **Persistência de Conta:** Após o login, o `numeroConta` é extraído das claims do token JWT e persistido de forma segura no **Flutter Secure Storage** sob a chave `NUMERO_CONTA`.
-- **Cabeçalhos Dinâmicos:** O valor persistido em `NUMERO_CONTA` é injetado automaticamente no header `x-account-id` de todas as requisições ao BFF via interceptor do Dio.
+---
 
 ## 🏛️ Arquitetura da Solução
 
-Este projeto adota uma arquitetura **Cloud Native** moderna, focada em segurança e separação de responsabilidades. O aplicativo Flutter atua como um cliente "burro" (stateless), delegando a lógica de negócios pesada para o Backend (BFF) e a identidade para o Firebase.
+O projeto adota uma arquitetura **Cloud Native**, focada em segurança e separação de responsabilidades.
 
 ### Diagrama de Integração
-![alt text](image.png)
+![Diagrama de Integração](image.png)
 
-### 🔄 Fluxo de Dados e Segurança
+### Fluxo de Dados e Segurança
+1.  **Auth (Firebase):** O usuário autentica e recebe um JWT assinado.
+2.  **BFF (Spring Boot):** O App envia o JWT no header. O BFF valida o token e processa a lógica de negócio.
+3.  **Banco de Dados (Postgres):** Armazena saldo, contas e livro caixa (transações).
 
-1.  **Autenticação (Identity Provider):**
-    * O usuário realiza login via **Firebase Auth** (Google/Email).
-    * O App recebe um **JWT (JSON Web Token)** assinado. Nenhuma senha é trafegada para o nosso backend.
-    
-2.  **API Gateway (Zuplo):**
-    * Todas as requisições HTTP saem do App apontando para o **API Gateway**.
-    * O App implementa **SSL Pinning** (via Dio) para garantir que está conversando com o Gateway legítimo, prevenindo ataques *Man-in-the-Middle*.
+---
 
-3.  **Backend for Frontend (BFF):**
-    * O App envia o JWT no header `Authorization: Bearer <token>`.
-    * O App aguarda respostas em JSON padronizado para montar as telas.
-
-### 🛠️ Tech Stack Mobile
+## 🛠️ Tech Stack Mobile
 * **Framework:** Flutter (Dart)
+* **Gerência de Estado:** GetX
 * **Http Client:** Dio (com Interceptors para Auth e Logging)
-* **State Management:** (Coloque o seu aqui: Provider/Bloc/Riverpod)
-## 🛠️ Documentação Técnica
+* **Segurança:** Firebase Auth, Flutter Secure Storage, Local Auth (Biometria)
 
-Para desenvolvedores que desejam contribuir ou manter este projeto, consulte o guia detalhado de arquitetura, padrões e configuração no arquivo:
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+* Flutter SDK (Stable)
+* Emulador Android ou Dispositivo Físico
+* Backend (BFF) em execução (opcional para algumas telas)
+
+### Comandos Iniciais
+```bash
+# Instalar dependências
+flutter pub get
+
+# Configurar Firebase (necessário FlutterFire CLI)
+flutterfire configure
+
+# Rodar o projeto
+flutter run
+```
+
+### Credenciais de Teste (Emulador)
+* **PIN do Emulador:** 12345
+* **E-mail:** `teste@teste.com.br`
+* **Senha:** `teste123`
+
+---
+
+## 🛠️ Documentação Técnica Detalhada
+
+Para mais detalhes sobre padrões de código, estrutura de diretórios e guias de contribuição, consulte:
 
 👉 **[DEVELOPER.md](DEVELOPER.md)**
+
+---
+*Este projeto é parte integrante de um Trabalho de Conclusão de Curso (TCC) sobre Segurança Cibernética.*
