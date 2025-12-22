@@ -62,41 +62,9 @@ class LoginController extends GetxController {
       // Verifica se a biometria foi ativada pelo usuário (simulado ou salvo)
       String? biometricEnabledPref = await _storage.read(key: 'biometric_enabled');
       bool isEnabledByUser = biometricEnabledPref == 'true';
-      
-      bool allowed = (canCheckBiometrics || isDeviceSupported) && isEnabledByUser;
 
-      if (allowed) {
-        // Última verificação: TTL da Sessão
-        final ttlString = await _storage.read(key: 'ttl_sessao');
-        bool sessaoExpirada = true;
-
-        if (ttlString != null) {
-          final exp = DateTime.parse(ttlString);
-          final agora = DateTime.now();
-          if (agora.isBefore(exp)) {
-            sessaoExpirada = false;
-          }
-        }
-
-        if (sessaoExpirada) {
-          // Sessão expirou, forçar login com senha
-          allowed = false;
-          
-          // Aguarda um frame para garantir que a UI esteja pronta para receber o foco
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Get.snackbar(
-              "Sessão Expirada",
-              "Sua sessão segura expirou. Por favor, entre com sua senha novamente.",
-              backgroundColor: Colors.orange,
-              colorText: Colors.white,
-              duration: const Duration(seconds: 4),
-            );
-            emailFocusNode.requestFocus();
-          });
-        }
-      }
-
-      isBiometricAllowed.value = allowed;
+      // Mostra o botão se o hardware suportar E se estiver ativado
+      isBiometricAllowed.value = (canCheckBiometrics || isDeviceSupported) && isEnabledByUser;
       
     } catch (e) {
       isBiometricAllowed.value = false;
@@ -210,11 +178,35 @@ class LoginController extends GetxController {
       );
 
       if (didAuthenticate) {
-        // Validação do Token
+        // 1. Verificar TTL da Sessão
+        final ttlString = await _storage.read(key: 'ttl_sessao');
+        bool sessaoValidaTTL = false;
+
+        if (ttlString != null) {
+          final exp = DateTime.parse(ttlString);
+          final agora = DateTime.now();
+          if (agora.isBefore(exp)) {
+            sessaoValidaTTL = true;
+          }
+        }
+
+        if (!sessaoValidaTTL) {
+            Get.snackbar(
+            "Sessão Expirada",
+            "Sua sessão expirou por segurança. Por favor, entre com sua senha novamente.",
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 4),
+          );
+          emailFocusNode.requestFocus();
+          return;
+        }
+
+        // 2. Validação do Token JWT (Camada extra de segurança)
         final token = await _storage.read(key: 'ACCESS_TOKEN');
 
         if (token != null && !JwtDecoder.isExpired(token)) {
-          // Token válido
+          // Token válido e TTL válido
           Get.offAllNamed('/home-page');
         } else {
           // Token expirado ou inexistente
@@ -227,6 +219,7 @@ class LoginController extends GetxController {
           );
           // Opcional: remover o token inválido
           await _storage.delete(key: 'ACCESS_TOKEN');
+          emailFocusNode.requestFocus();
         }
       }
     } catch (e) {
