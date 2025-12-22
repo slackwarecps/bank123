@@ -1,6 +1,7 @@
 import 'package:bank123/pages/contatos_page.dart';
 import 'package:bank123/telas/diversos/pagina01_secure.dart';
 import 'package:bank123/bindings/auth_binding.dart';
+import 'package:bank123/bindings/login_binding.dart';
 import 'package:bank123/telas/diversos/pagina02_shared_preferences.dart';
 import 'package:bank123/telas/diversos/pagina03_biometric%20copy.dart';
 import 'package:bank123/telas/diversos/validaAutenticacao.dart';
@@ -39,10 +40,10 @@ class MainApp extends StatelessWidget {
       initialRoute: '/splash',
       getPages: [
         GetPage(name: '/splash', page: () => const SplashScreen()),
-        GetPage(name: '/', page: () => LoginScreen()),
+        GetPage(name: '/', page: () => LoginScreen(), binding: LoginBinding()),
         GetPage(name: '/valida-autenticacao', page: () => ValidaAutenticacao()),
         GetPage(name: '/home-page', page: () => const HomePage()),
-        GetPage(name: '/login', page: () => LoginScreen()),
+        GetPage(name: '/login', page: () => LoginScreen(), binding: LoginBinding()),
         GetPage(name: '/cadastro', page: () => CadastroPage()),
         GetPage(name: '/perfil', page: () => const PerfilPage()),
         GetPage(name: '/configuracoes', page: () => const ConfiguracaoPage()),

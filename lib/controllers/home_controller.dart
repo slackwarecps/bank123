@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomeController extends GetxController {
   final BffService _bffService = BffService();
@@ -11,35 +12,80 @@ class HomeController extends GetxController {
   final _storage = const FlutterSecureStorage();
   var isLoading = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Verifica o token assim que a Home é inicializada
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _validarTokenInicial();
+    });
+  }
+
+  Future<void> _validarTokenInicial() async {
+    final token = await _storage.read(key: 'ACCESS_TOKEN');
+
+    if (token == null || JwtDecoder.isExpired(token)) {
+      // Token inválido ou expirado
+      print('### TOKEN INVALIDO OU EXPIRADO AO ENTRAR NA HOME ###');
+      Get.offAllNamed('/login');
+      Get.snackbar(
+        "Sessão Expirada",
+        "Sua sessão expirou. Por favor, faça login novamente.",
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+      // Limpeza de segurança
+      await _storage.delete(key: 'ACCESS_TOKEN');
+      await _storage.delete(key: 'biometric_enabled');
+      await _storage.delete(key: 'ttl_sessao');
+    }
+  }
+
   Future<bool> _sessaoValida() async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) return false;
-
-      // Ler o TTL da sessão do storage
+      // Verifica TTL customizado
       final ttlString = await _storage.read(key: 'ttl_sessao');
-      
-      if (ttlString == null) {
-        // Se não tiver TTL salvo, assume expirado por segurança
-        _mostrarAlertaSessaoExpirada();
-        return false;
+      if (ttlString != null) {
+         final exp = DateTime.parse(ttlString);
+         final agora = DateTime.now();
+         if (agora.isAfter(exp)) {
+           _mostrarAlertaSessaoExpirada();
+           return false;
+         }
       }
 
-      final exp = DateTime.parse(ttlString);
-      final agora = DateTime.now();
-
-      // Verifica se o tempo limite foi atingido (agora >= exp)
-      if (agora.isAfter(exp) || agora.isAtSameMomentAs(exp)) {
-        _mostrarAlertaSessaoExpirada();
-        return false;
+      // Verifica validade do JWT Real
+      final token = await _storage.read(key: 'ACCESS_TOKEN');
+      if (token == null || JwtDecoder.isExpired(token)) {
+         _mostrarAlertaSessaoExpirada();
+         return false;
       }
       
       return true;
     } catch (e) {
-      // Se der erro ao ler/parsear, considera expirado
       _mostrarAlertaSessaoExpirada();
       return false;
     }
+  }
+
+  void confirmarLogout() {
+    Get.defaultDialog(
+      title: "Sair",
+      middleText: "Será necessário fazer o login novamente. Deseja continuar?",
+      textConfirm: "Sim",
+      textCancel: "Não",
+      confirmTextColor: Colors.white,
+      onConfirm: () async {
+        // Limpar dados sensíveis e configurações de biometria
+        await _storage.delete(key: 'ACCESS_TOKEN');
+        await _storage.delete(key: 'biometric_enabled');
+        await _storage.delete(key: 'ttl_sessao'); // Opcional: limpar sessão também
+        
+        await _auth.signOut();
+        Get.offAllNamed('/login');
+      },
+    );
   }
 
   void _mostrarAlertaSessaoExpirada() {

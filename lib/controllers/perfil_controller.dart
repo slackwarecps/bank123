@@ -2,15 +2,18 @@ import 'package:bank123/services/bff_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class PerfilController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _storage = const FlutterSecureStorage();
   
   final email = ''.obs;
   final uid = ''.obs;
   final iat = ''.obs;
   final exp = ''.obs;
+  final ttlSessao = ''.obs;
   final token = ''.obs;
   final bank123Claims = ''.obs;
 
@@ -46,6 +49,10 @@ class PerfilController extends GetxController {
 
       iat.value = authTime != null ? authTime.toString() : 'N/A';
       exp.value = expirationTime != null ? expirationTime.toString() : 'N/A';
+
+      // Ler TTL Sessão do Storage
+      final savedTtl = await _storage.read(key: 'ttl_sessao');
+      ttlSessao.value = savedTtl ?? 'N/A';
     }
   }
 

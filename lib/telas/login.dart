@@ -59,6 +59,7 @@ class LoginScreen extends StatelessWidget {
                     // Email Field
                     TextField(
                       controller: controller.emailController,
+                      focusNode: controller.emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: 'E-mail',

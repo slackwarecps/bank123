@@ -46,6 +46,7 @@ class PerfilPage extends StatelessWidget {
                   _buildInfoCard(context, 'UID', controller.uid.value),
                   _buildInfoCard(context, 'Emitido em (iat)', controller.iat.value),
                   _buildInfoCard(context, 'Expira em (exp)', controller.exp.value),
+                  _buildInfoCard(context, 'TTL Sessão (App)', controller.ttlSessao.value),
                   _buildInfoCard(context, 'Bank123 Claims', controller.bank123Claims.value),
                   const SizedBox(height: 16),
                   const Text(

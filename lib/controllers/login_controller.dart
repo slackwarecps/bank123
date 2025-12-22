@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,12 +16,19 @@ class LoginController extends GetxController {
   // Controllers for text fields
   final emailController = TextEditingController(text: 'teste@teste.com.br');
   final passwordController = TextEditingController(text: 'teste123');
+  final emailFocusNode = FocusNode();
 
   @override
   void onInit() {
     super.onInit();
     _checkBiometricSettings();
     _loadSavedCredentials();
+  }
+  
+  @override
+  void onClose() {
+    emailFocusNode.dispose();
+    super.onClose();
   }
 
   @override
@@ -47,8 +55,49 @@ class LoginController extends GetxController {
 
   Future<void> _checkBiometricSettings() async {
     try {
-      String? value = await _storage.read(key: 'biometric_enabled');
-      isBiometricAllowed.value = value == 'true';
+      // Verifica se o dispositivo suporta biometria
+      bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+      bool isDeviceSupported = await _localAuth.isDeviceSupported();
+      
+      // Verifica se a biometria foi ativada pelo usuário (simulado ou salvo)
+      String? biometricEnabledPref = await _storage.read(key: 'biometric_enabled');
+      bool isEnabledByUser = biometricEnabledPref == 'true';
+      
+      bool allowed = (canCheckBiometrics || isDeviceSupported) && isEnabledByUser;
+
+      if (allowed) {
+        // Última verificação: TTL da Sessão
+        final ttlString = await _storage.read(key: 'ttl_sessao');
+        bool sessaoExpirada = true;
+
+        if (ttlString != null) {
+          final exp = DateTime.parse(ttlString);
+          final agora = DateTime.now();
+          if (agora.isBefore(exp)) {
+            sessaoExpirada = false;
+          }
+        }
+
+        if (sessaoExpirada) {
+          // Sessão expirou, forçar login com senha
+          allowed = false;
+          
+          // Aguarda um frame para garantir que a UI esteja pronta para receber o foco
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.snackbar(
+              "Sessão Expirada",
+              "Sua sessão segura expirou. Por favor, entre com sua senha novamente.",
+              backgroundColor: Colors.orange,
+              colorText: Colors.white,
+              duration: const Duration(seconds: 4),
+            );
+            emailFocusNode.requestFocus();
+          });
+        }
+      }
+
+      isBiometricAllowed.value = allowed;
+      
     } catch (e) {
       isBiometricAllowed.value = false;
     }
@@ -75,16 +124,21 @@ class LoginController extends GetxController {
 
       // Logs de Retorno e Status do Login
       final tokenResult = await userCredential.user?.getIdTokenResult();
+      final accessToken = tokenResult?.token;
       
  
         print('\n======= LOGIN SUCCESS =======');
         print('Status: Autenticado com sucesso');
         print('User UID: ${userCredential.user?.uid}');
         print('Email: ${userCredential.user?.email}');
-        print('Token: ${tokenResult?.token}');
+        print('Token: $accessToken');
         print('Claims: ${tokenResult?.claims}');
         print('==============================\n');
    
+      // Salvar o Token de acesso para validação biométrica futura
+      if (accessToken != null) {
+        await _storage.write(key: 'ACCESS_TOKEN', value: accessToken);
+      }
 
       // Extrair numeroConta das claims e salvar no Secure Storage
       final claims = tokenResult?.claims;
@@ -106,6 +160,8 @@ class LoginController extends GetxController {
       // Salvar credenciais para o próximo login
       await _storage.write(key: 'SAVED_EMAIL', value: emailController.text.trim());
       await _storage.write(key: 'SAVED_PASSWORD', value: passwordController.text.trim());
+      
+      // _checkBiometricSettings(); // Atualiza a UI
 
       // Definir TTL da sessão (5 minutos a partir de agora)
       final ttl = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
@@ -145,31 +201,33 @@ class LoginController extends GetxController {
 
   Future<void> loginWithBiometrics() async {
     try {
-      bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
-      bool isDeviceSupported = await _localAuth.isDeviceSupported();
+      bool didAuthenticate = await _localAuth.authenticate(
+        localizedReason: 'Por favor, autentique-se para entrar',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
 
-      if (canCheckBiometrics || isDeviceSupported) {
-        bool didAuthenticate = await _localAuth.authenticate(
-          localizedReason: 'Por favor, autentique-se para entrar',
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: true,
-          ),
-        );
+      if (didAuthenticate) {
+        // Validação do Token
+        final token = await _storage.read(key: 'ACCESS_TOKEN');
 
-        if (didAuthenticate) {
-          // Aqui, em um app real, você provavelmente usaria um token salvo
-          // ou apenas permitiria o acesso se o usuário já tivesse logado uma vez.
-          // Para este protótipo, vamos navegar para a home.
+        if (token != null && !JwtDecoder.isExpired(token)) {
+          // Token válido
           Get.offAllNamed('/home-page');
+        } else {
+          // Token expirado ou inexistente
+          Get.snackbar(
+            "Sessão Expirada",
+            "Sua sessão expirou por segurança. Por favor, entre com sua senha novamente.",
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 4),
+          );
+          // Opcional: remover o token inválido
+          await _storage.delete(key: 'ACCESS_TOKEN');
         }
-      } else {
-        Get.snackbar(
-          "Biometria",
-          "Biometria não disponível neste dispositivo.",
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
       }
     } catch (e) {
       Get.snackbar(

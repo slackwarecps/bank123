@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
                       } else if (value == 'configuracoes') {
                         Get.toNamed('/configuracoes');
                       } else if (value == 'sair') {
-                        Get.offAllNamed('/login');
+                        controller.confirmarLogout();
                       }
                     },
                     itemBuilder: (context) => [
