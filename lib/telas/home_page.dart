@@ -120,15 +120,15 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: FilledButton(
-                      onPressed: () {
+                    child: Obx(() => FilledButton(
+                      onPressed: controller.isLoading.value ? null : () {
                         controller.irParaTransferencia();
                       },
                       child: const Text(
                         'Realizar transação',
                         style: TextStyle(fontSize: 16),
                       ),
-                    ),
+                    )),
                   ),
                 ],
               ),
