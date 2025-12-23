@@ -11,11 +11,13 @@ import 'package:bank123/telas/tela_de_erro.dart';
 import 'package:bank123/telas/transferencia_page.dart';
 import 'package:bank123/telas/extrato_page.dart';
 import 'package:bank123/telas/home_page.dart';
+import 'package:bank123/telas/jailbreak_page.dart'; // Importação da tela de Jailbreak
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bank123/firebase_options.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:safe_device/safe_device.dart'; // Importação do pacote safe_device
 import 'dart:ui';
 
 void main() async {
@@ -31,11 +33,20 @@ void main() async {
     return true;
   };
 
-  runApp(const MainApp());
+  bool isJailBroken = false;
+  try {
+    isJailBroken = await SafeDevice.isJailBroken;
+    isJailBroken = true;
+  } catch (e) {
+    debugPrint("Erro ao verificar jailbreak: $e");
+  }
+
+  runApp(MainApp(isJailBroken: isJailBroken));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final bool isJailBroken;
+  const MainApp({super.key, this.isJailBroken = false});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +56,9 @@ class MainApp extends StatelessWidget {
         page: () => PaginaNaoEncontrada(),
       ),
 
-      initialRoute: '/',
+      initialRoute: isJailBroken ? '/jailbreak' : '/',
       getPages: [
+        GetPage(name: '/jailbreak', page: () => const JailbreakPage()),
         GetPage(name: '/', page: () => LoginScreen(), binding: LoginBinding()),
         GetPage(name: '/home-page', page: () => const HomePage()),
         GetPage(name: '/login', page: () => LoginScreen(), binding: LoginBinding()),
