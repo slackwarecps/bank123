@@ -106,20 +106,34 @@ flutter run
 
 ---
 
-## 🔧 Configuração de Ambiente
+## 🔧 Configuração de Ambiente e Execução
 
-Para executar o projeto, é necessário criar um arquivo chamado `.env` na raiz do projeto (no mesmo nível do `pubspec.yaml`). Este arquivo contém variáveis sensíveis ou configuráveis por ambiente e **não deve ser versionado no Git**.
+Este projeto utiliza **variáveis em tempo de compilação** (`--dart-define`) para configurar endereços de API e outros segredos, garantindo maior segurança ao não empacotar arquivos `.env` texto-claro dentro do aplicativo.
 
-### Exemplo de arquivo `.env`
+### Opção 1: Via VS Code (Recomendado)
 
-Crie o arquivo e adicione o seguinte conteúdo:
+O projeto já inclui um arquivo de configuração de lançamento (`.vscode/launch.json`) pré-configurado. Basta acessar a aba **"Run and Debug"** do VS Code e selecionar a configuração:
 
-```env
-# URL base da API (BFF)
-API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev
+*   **bank123**: Executa o app em modo debug conectando-se ao ambiente padrão.
+
+O arquivo `launch.json` injeta automaticamente a variável `API_BASE_URL`.
+
+### Opção 2: Via Linha de Comando (CLI)
+
+Para rodar o projeto via terminal, é **obrigatório** passar a variável `API_BASE_URL`.
+
+```bash
+# Rodar em modo Debug
+flutter run --dart-define=API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev
+
+# Rodar em modo Release
+flutter run --release --dart-define=API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev
+
+# Gerar APK
+flutter build apk --dart-define=API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev
 ```
 
-> **Nota:** Se você não configurar este arquivo, o aplicativo utilizará a URL de fallback ou falhará ao conectar com o backend.
+> **Nota de Segurança:** Não versionamos arquivos de configuração. As URLs e chaves devem ser injetadas pelo pipeline de CI/CD ou pelo desenvolvedor no momento do build.
 
 ---
 

@@ -118,15 +118,7 @@ class LoginController extends GetxController {
       // If successful, navigate to home
       Get.offAllNamed('/home-page');
     } on FirebaseAuthException catch (e) {
-      String errorMessage = "Erro ao realizar login.";
-
-      if (e.code == 'user-not-found') {
-        errorMessage = 'Usuário não encontrado.';
-      } else if (e.code == 'wrong-password') {
-        errorMessage = 'Senha incorreta.';
-      } else if (e.code == 'invalid-email') {
-        errorMessage = 'E-mail inválido.';
-      }
+      String errorMessage = "E-mail ou senha inválidos.";
 
       Get.snackbar(
         "Falha no Login",

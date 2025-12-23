@@ -8,19 +8,31 @@
         {
             "name": "bank123",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev"
+            ]
         },
         {
             "name": "bank123 (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define",
+                "API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev"
+            ]
         },
         {
             "name": "bank123 (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--dart-define",
+                "API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev"
+            ]
         }
     ]
 }
