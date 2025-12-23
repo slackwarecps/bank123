@@ -1,5 +1,9 @@
+import 'dart:developer' as developer;
+import 'dart:io';
 import 'dart:math';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,12 +18,47 @@ class BffService {
   // URL Base do BFF
   final String _baseUrl = 'https://bank123-main-297cd30.d2.zuplo.dev';
 
+  // Fingerprint SHA-256 do Certificado (Obtido via OpenSSL)
+  // RNF04 - Segurança (Prevenção MITM)
+  final String _expectedFingerprint = 
+      'F9:14:B8:18:CA:D2:7D:D4:08:33:A8:4E:47:3D:27:AF:94:75:1D:2D:17:CE:1C:28:92:FB:21:0E:E4:C4:07:C6';
+
   BffService() {
     _dio = Dio(BaseOptions(
       baseUrl: _baseUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ));
+
+    // Configuração do SSL Pinning (RNF04)
+    if (!kIsWeb) {
+      _dio.httpClientAdapter = IOHttpClientAdapter(
+        createHttpClient: () {
+          final client = HttpClient();
+          client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+            // Verifica se o host é o alvo esperado
+            if (!host.contains('zuplo.dev')) {
+              return false; // Rejeita outros hosts se necessário ou ajusta lógica
+            }
+            
+            // Calcula o SHA-256 do DER (binário do certificado)
+            final digest = sha256.convert(cert.der).bytes;
+            final serverFingerprint = _bytesToHex(digest);
+            
+            final isValid = serverFingerprint == _expectedFingerprint;
+
+            if (!isValid && kDebugMode) {
+               developer.log('🚨 ALERTA DE SEGURANÇA (SSL PINNING) 🚨', name: 'BffService');
+               developer.log('Esperado: $_expectedFingerprint', name: 'BffService');
+               developer.log('Recebido: $serverFingerprint', name: 'BffService');
+            }
+
+            return isValid; 
+          };
+          return client;
+        },
+      );
+    }
 
     // Configura o Interceptor para injetar headers em TODAS as requisições
     _dio.interceptors.add(InterceptorsWrapper(
@@ -30,7 +69,7 @@ class BffService {
           if (user == null) {
             // Se não tiver usuário, tenta seguir, mas provavelmente vai falhar no backend
             // ou podemos rejeitar aqui. Vamos tentar logar o que temos.
-             if (kDebugMode) print('AVISO: Usuário não autenticado no Firebase.');
+             if (kDebugMode) developer.log('AVISO: Usuário não autenticado no Firebase.', name: 'BffService');
           }
           final String? token = await user?.getIdToken();
 
@@ -45,7 +84,7 @@ class BffService {
               accountId = storedId;
             }
           } catch (e) {
-            if (kDebugMode) print('Erro ao ler Secure Storage: $e');
+            if (kDebugMode) developer.log('Erro ao ler Secure Storage: $e', name: 'BffService');
           }
 
           // 4. Injetar Headers (Garantindo que o Map existe)
@@ -55,25 +94,17 @@ class BffService {
 
           // LOG DETALHADO
           if (kDebugMode) {
-            print('\n---------------------------------------------------\n');
-            print('🚀 HTTP REQUEST: ${options.method} ${options.uri}');
-            print('---------------------------------------------------');
-            print('HEADERS ENVIADOS:');
-            options.headers.forEach((key, value) {
-              print('   $key: $value');
-            });
-            print('---------------------------------------------------');
+            developer.log('🚀 HTTP REQUEST: ${options.method} ${options.uri}', name: 'BffService');
+            developer.log('HEADERS ENVIADOS: ${options.headers}', name: 'BffService');
             if (options.data != null) {
-              print('PAYLOAD: ${options.data}');
-              print('---------------------------------------------------');
+              developer.log('PAYLOAD: ${options.data}', name: 'BffService');
             }
-            print('\n');
           }
 
           return handler.next(options);
         } catch (e) {
           if (kDebugMode) {
-            print('❌ Erro Fatal no Interceptor: $e');
+            developer.log('❌ Erro Fatal no Interceptor: $e', name: 'BffService');
           }
           // Mesmo com erro, tenta passar a requisição adiante para não travar o app,
           // mas loga o erro.
@@ -82,20 +113,18 @@ class BffService {
       },
       onResponse: (response, handler) {
         if (kDebugMode) {
-          print('\n✅ HTTP RESPONSE: ${response.statusCode} [${response.requestOptions.uri}]');
-          print('Payload: ${response.data}');
-          print('---------------------------------------------------\n');
+          developer.log('✅ HTTP RESPONSE: ${response.statusCode} [${response.requestOptions.uri}]', name: 'BffService');
+          developer.log('Payload: ${response.data}', name: 'BffService');
         }
         return handler.next(response);
       },
       onError: (DioException e, handler) {
         if (kDebugMode) {
-          print('\n🔥 HTTP ERROR: ${e.response?.statusCode} [${e.requestOptions.uri}]');
-          print('Erro: ${e.message}');
+          developer.log('🔥 HTTP ERROR: ${e.response?.statusCode} [${e.requestOptions.uri}]', name: 'BffService');
+          developer.log('Erro: ${e.message}', name: 'BffService');
           if (e.response != null) {
-            print('Payload Erro: ${e.response?.data}');
+            developer.log('Payload Erro: ${e.response?.data}', name: 'BffService');
           }
-          print('---------------------------------------------------\n');
         }
         return handler.next(e);
       },
@@ -150,5 +179,10 @@ class BffService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  // Helper para formatar o fingerprint
+  String _bytesToHex(List<int> bytes) {
+    return bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0').toUpperCase()).join(':');
   }
 }

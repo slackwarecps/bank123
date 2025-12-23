@@ -94,4 +94,13 @@ Para mais detalhes sobre padrões de código, estrutura de diretórios e guias d
 👉 **[DEVELOPER.md](DEVELOPER.md)**
 
 ---
+
+## 🎥 Demonstração
+
+Assista ao vídeo de demonstração do funcionamento da aplicação, incluindo os fluxos de autenticação e segurança:
+
+👉 **[Evidência de Funcionamento - YouTube](https://www.youtube.com/watch?v=b0IVpilbShs)**
+
+---
+
 *Este projeto é parte integrante de um Trabalho de Conclusão de Curso (TCC) sobre Segurança Cibernética.*
