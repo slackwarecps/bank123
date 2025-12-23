@@ -35,6 +35,7 @@ Os requisitos não funcionais descrevem os atributos de qualidade e restrições
 7.  **RNF07 - Gerenciamento de Estado:** Uso da biblioteca `GetX` para gerenciamento de estado reativo, injeção de dependências e navegação.
 8.  **RNF08 - Desempenho e Feedback:** O app deve exibir uma Splash Screen e indicadores de carregamento durante operações assíncronas para melhorar a percepção de performance.
 9.  **RNF09 - Compatibilidade:** Suporte mínimo para Android API 18+.
+10. **RNF10 - Monitoramento de Falhas:** O aplicativo deve utilizar o Firebase Crashlytics para monitorar estabilidade, capturar exceções fatais e registrar erros não tratados em tempo real.
 
 ---
 
