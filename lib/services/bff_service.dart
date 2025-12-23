@@ -20,6 +20,10 @@ class BffService {
 
   // Fingerprint SHA-256 do Certificado (Obtido via OpenSSL)
   // RNF04 - Segurança (Prevenção MITM)
+  // DECISÃO DE DESIGN: O fingerprint é mantido hard-coded (constante binária) em vez de .env
+  // por segurança. Arquivos .env em Flutter são empacotados como assets de texto claro,
+  // facilitando o bypass via reempacotamento (repackaging). Mantendo no código nativo
+  // compilado (AOT), o atacante precisaria realizar patch binário, elevando a complexidade do ataque.
   final String _expectedFingerprint = 
       'F9:14:B8:18:CA:D2:7D:D4:08:33:A8:4E:47:3D:27:AF:94:75:1D:2D:17:CE:1C:28:92:FB:21:0E:E4:C4:07:C6';
 
