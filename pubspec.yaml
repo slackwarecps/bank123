@@ -1,7 +1,7 @@
 name: bank123
-description: "A new Flutter project."
+description: "Frontend mobile do projeto Bank123, um protótipo de banco digital desenvolvido para TCC focado em segurança cibernética, implementando autenticação Firebase, biometria e proteções contra ameaças mobile."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
   sdk: ^3.7.0
