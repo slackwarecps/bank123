@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BffService {
   late Dio _dio;
@@ -16,7 +17,7 @@ class BffService {
   final _uuid = const Uuid();
 
   // URL Base do BFF
-  final String _baseUrl = 'https://bank123-main-297cd30.d2.zuplo.dev';
+  final String _baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://bank123-main-297cd30.d2.zuplo.dev';
 
   // Fingerprint SHA-256 do Certificado (Obtido via OpenSSL)
   // RNF04 - Segurança (Prevenção MITM)

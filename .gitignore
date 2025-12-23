@@ -56,4 +56,4 @@ lib/firebase_options.dart
 
 # Environment Variables
 .env
-.env.*
+.env.*.env

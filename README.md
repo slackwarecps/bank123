@@ -87,6 +87,23 @@ flutter run
 
 ---
 
+## 🔧 Configuração de Ambiente
+
+Para executar o projeto, é necessário criar um arquivo chamado `.env` na raiz do projeto (no mesmo nível do `pubspec.yaml`). Este arquivo contém variáveis sensíveis ou configuráveis por ambiente e **não deve ser versionado no Git**.
+
+### Exemplo de arquivo `.env`
+
+Crie o arquivo e adicione o seguinte conteúdo:
+
+```env
+# URL base da API (BFF)
+API_BASE_URL=https://bank123-main-297cd30.d2.zuplo.dev
+```
+
+> **Nota:** Se você não configurar este arquivo, o aplicativo utilizará a URL de fallback ou falhará ao conectar com o backend.
+
+---
+
 ## 🛠️ Documentação Técnica Detalhada
 
 Para mais detalhes sobre padrões de código, estrutura de diretórios e guias de contribuição, consulte:

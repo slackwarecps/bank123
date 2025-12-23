@@ -21,6 +21,7 @@ import 'package:safe_device/safe_device.dart'; // Importação do pacote safe_de
 import 'dart:ui';
 import 'dart:io'; // Necessário para verificação de arquivos e sockets
 import 'dart:async'; // Para o Timer de proteção ativa
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Variáveis de ambiente
 
 // Verifica traços do Frida na memória do processo
 Future<bool> checkFridaMemoryTrace() async {
@@ -94,6 +95,7 @@ void startActiveProtection() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); // Carrega variáveis de ambiente
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   
   // Pass all uncaught "fatal" errors from the framework to Crashlytics
