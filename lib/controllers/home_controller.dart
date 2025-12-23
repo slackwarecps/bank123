@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'dart:developer' as developer;
 
 class HomeController extends GetxController {
   final BffService _bffService = BffService();
@@ -26,7 +27,7 @@ class HomeController extends GetxController {
 
     if (token == null || JwtDecoder.isExpired(token)) {
       // Token inválido ou expirado
-      print('### TOKEN INVALIDO OU EXPIRADO AO ENTRAR NA HOME ###');
+      developer.log('### TOKEN INVALIDO OU EXPIRADO AO ENTRAR NA HOME ###', name: 'HomeController');
       Get.offAllNamed('/login');
       Get.snackbar(
         "Sessão Expirada",

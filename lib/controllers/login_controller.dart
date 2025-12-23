@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'dart:developer' as developer;
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -49,7 +50,7 @@ class LoginController extends GetxController {
         passwordController.text = savedPassword;
       }
     } catch (e) {
-      print('Erro ao carregar credenciais: $e');
+      developer.log('Erro ao carregar credenciais: $e', name: 'LoginController');
     }
   }
 
@@ -95,13 +96,13 @@ class LoginController extends GetxController {
       final accessToken = tokenResult?.token;
       
  
-        print('\n======= LOGIN SUCCESS =======');
-        print('Status: Autenticado com sucesso');
-        print('User UID: ${userCredential.user?.uid}');
-        print('Email: ${userCredential.user?.email}');
-        print('Token: $accessToken');
-        print('Claims: ${tokenResult?.claims}');
-        print('==============================\n');
+        developer.log('\n======= LOGIN SUCCESS =======', name: 'LoginController');
+        developer.log('Status: Autenticado com sucesso', name: 'LoginController');
+        developer.log('User UID: ${userCredential.user?.uid}', name: 'LoginController');
+        developer.log('Email: ${userCredential.user?.email}', name: 'LoginController');
+        developer.log('Token: $accessToken', name: 'LoginController');
+        developer.log('Claims: ${tokenResult?.claims}', name: 'LoginController');
+        developer.log('==============================\n', name: 'LoginController');
    
       // Salvar o Token de acesso para validação biométrica futura
       if (accessToken != null) {
