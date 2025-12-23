@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 import 'dart:io';
-import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -17,7 +16,7 @@ class BffService {
   final _uuid = const Uuid();
 
   // URL Base do BFF
-  final String _baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://bank123-main-297cd30.d2.zuplo.dev';
+  final String _baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://dummy.com.dev';
 
   // Fingerprint SHA-256 do Certificado (Obtido via OpenSSL)
   // RNF04 - Segurança (Prevenção MITM)
