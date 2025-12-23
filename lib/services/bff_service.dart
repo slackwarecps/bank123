@@ -15,7 +15,7 @@ class BffService {
   final _uuid = const Uuid();
 
   // URL Base do BFF
-  final String _baseUrl = const String.fromEnvironment('API_BASE_URL', defaultValue: 'http://dummy.com.dev');
+  final String _baseUrl = const String.fromEnvironment('API_BASE_URL', defaultValue: 'https://dummy.com.dev');
 
   // Fingerprint SHA-256 do Certificado (Obtido via OpenSSL)
   // RNF04 - Segurança (Prevenção MITM)
