@@ -36,7 +36,6 @@ void main() async {
   bool isJailBroken = false;
   try {
     isJailBroken = await SafeDevice.isJailBroken;
-    isJailBroken = true;
   } catch (e) {
     debugPrint("Erro ao verificar jailbreak: $e");
   }
