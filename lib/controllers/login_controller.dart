@@ -15,15 +15,14 @@ class LoginController extends GetxController {
   var isBiometricAllowed = false.obs; // Controla se o botão aparece
 
   // Controllers for text fields
-  final emailController = TextEditingController(text: 'teste@teste.com.br');
-  final passwordController = TextEditingController(text: 'teste123');
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final emailFocusNode = FocusNode();
 
   @override
   void onInit() {
     super.onInit();
     _checkBiometricSettings();
-    _loadSavedCredentials();
   }
   
   @override
@@ -36,22 +35,6 @@ class LoginController extends GetxController {
   void onReady() {
     super.onReady();
     _checkBiometricSettings();
-  }
-
-  Future<void> _loadSavedCredentials() async {
-    try {
-      final savedEmail = await _storage.read(key: 'SAVED_EMAIL');
-      final savedPassword = await _storage.read(key: 'SAVED_PASSWORD');
-
-      if (savedEmail != null && savedEmail.isNotEmpty) {
-        emailController.text = savedEmail;
-      }
-      if (savedPassword != null && savedPassword.isNotEmpty) {
-        passwordController.text = savedPassword;
-      }
-    } catch (e) {
-      developer.log('Erro ao carregar credenciais: $e', name: 'LoginController');
-    }
   }
 
   Future<void> _checkBiometricSettings() async {
@@ -126,10 +109,6 @@ class LoginController extends GetxController {
         }
       }
 
-      // Salvar credenciais para o próximo login
-      await _storage.write(key: 'SAVED_EMAIL', value: emailController.text.trim());
-      await _storage.write(key: 'SAVED_PASSWORD', value: passwordController.text.trim());
-      
       // _checkBiometricSettings(); // Atualiza a UI
 
       // Definir TTL da sessão (5 minutos a partir de agora)
