@@ -39,6 +39,25 @@ Os requisitos não funcionais descrevem os atributos de qualidade e restrições
 
 ---
 
+## 🛡️ Mecanismos de Defesa Avançados
+
+Além dos requisitos não funcionais padrão, este projeto implementa camadas extras de defesa focadas em **Anti-Reversing** e **Integridade de Runtime**, cruciais para o escopo de segurança do TCC.
+
+### 1. Proteção Ativa Anti-Frida 🕵️‍♂️
+O aplicativo possui um sistema de **autodefesa ativo** que monitora o ambiente de execução em busca do toolkit de instrumentação dinâmica **Frida**. A detecção ocorre em quatro vetores:
+*   **Análise de Memória (`/proc/self/maps`):** O app lê sua própria memória mapeada para detectar bibliotecas injetadas (como `frida-agent.so`, `gum-js-loop`, `linjector`).
+*   **Verificação de Portas:** Monitora tentativas de conexão na porta padrão do servidor Frida (`27042`).
+*   **Varredura de Arquivos:** Busca por binários do `frida-server` em diretórios temporários e de sistema.
+*   **Monitoramento Contínuo (Kill Switch):** Um *Timer* executa varreduras periódicas a cada 5 segundos. Se uma ameaça for detectada durante o uso, o aplicativo executa um `exit(0)` imediato, forçando o encerramento para prevenir a injeção de scripts.
+
+### 2. Ofuscação de Código e Compilação 🧩
+Para dificultar a engenharia reversa estática:
+*   **Compilação AOT (Ahead-of-Time):** O código Dart é compilado para código de máquina nativo (ARM64/x86), eliminando a necessidade de interpretadores JIT em produção e removendo o código fonte original.
+*   **R8 / ProGuard:** No Android, o código nativo e as classes Java/Kotlin passam por processos de *shrinking* e ofuscação de símbolos.
+*   **Split Debug Info:** Em builds de release, recomenda-se o uso da flag `--obfuscate --split-debug-info` para remover metadados de depuração e renomear classes/funções para identificadores sem sentido (ex: `a.b()`), tornando a leitura do fluxo lógico extremamente complexa para atacantes.
+
+---
+
 ## 🏛️ Arquitetura da Solução
 
 O projeto adota uma arquitetura **Cloud Native**, focada em segurança e separação de responsabilidades.
